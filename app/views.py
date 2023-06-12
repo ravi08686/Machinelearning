@@ -18,6 +18,18 @@ def home(request):
         }
     )
 
+def upload(request):
+    """Renders the home page."""
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/upload.html',
+        {
+            'title':'Upload page',
+            'year':datetime.now().year,
+        }
+    )
+
 def contact(request):
     """Renders the contact page."""
     assert isinstance(request, HttpRequest)

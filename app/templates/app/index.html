@@ -1,0 +1,21 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <h1>Machine learning</h1>
+    <p class="lead">This web site helps you in analyzing the data set. If you have any CSV then you can upload and do analysys using best suitable algorithms.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Upload the file to predict:</h2>
+        <form action="/action_page.php">
+            <input type="file" id="myFile" name="filename">
+            <input type="submit">
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

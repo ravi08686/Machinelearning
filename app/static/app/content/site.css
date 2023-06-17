@@ -9,6 +9,12 @@ body {
     padding-right: 15px;
 }
 
+#dataset {
+    float: left;
+    width: 1000px;
+    overflow-y: auto;
+    height: 400px;
+}
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,

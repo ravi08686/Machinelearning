@@ -10,12 +10,52 @@
 <div class="row">
     <div class="col-md-4">
         <h2>Upload the file to predict:</h2>
-        <form action="/action_page.php">
-            <input type="file" id="myFile" name="filename">
-            <input type="submit">
+        <form method="post" action="method1" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="file">
+            <button type="submit">Upload</button>
         </form>
 
     </div>
 </div>
+<br/>
+<h2>The dataset from CSV:</h2>
+<div class="row" id="dataset">
+    {{dataitems|safe}}
+</div>
+<br/>
+<br/>
+<div class="row">
+    <form method="post" action="method2">
+        {% csrf_token %}
 
-{% endblock %}
+        <p>Select X features to calculate:</p>
+        {% for field in form %}
+        <label>
+            <input type="checkbox" name="field_name_x" value="{{ field.label }}">
+            {{ field.label }}
+        </label>
+        <br>
+        {% endfor %}
+        <br />
+        <p>Select Y feature to predict:</p>
+        {% for field in form %}
+        <label>
+            <input type="checkbox" name="field_name_y" value="{{ field.label }}">
+            {{ field.label }}
+        </label>
+        <br>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+</div>
+<div class="row">
+    <div>
+        <h1>{{xfeatures}}</h1>
+        <br />
+        <h1>{{yfeatures}}</h1>
+
+    </div>
+</div>
+
+    {% endblock %}

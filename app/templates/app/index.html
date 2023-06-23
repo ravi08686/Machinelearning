@@ -7,55 +7,111 @@
     <p class="lead">This web site helps you in analyzing the data set. If you have any CSV then you can upload and do analysys using best suitable algorithms.</p>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Upload the file to predict:</h2>
-        <form method="post" action="method1" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="file">
-            <button type="submit">Upload</button>
-        </form>
+<div class="rowtile">
+    <h2>Step1: Upload the file to predict:</h2>
+    <form method="post" action="method1" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="file">
+        <button type="submit">Upload</button>
+    </form>
+</div>
+<br />
+<div class="rowtile" id="dataset">
+    <h2>Step2: Verify the data in below dataset</h2>
 
+    <div class="col-md-12">
+        {{dataitems|safe}}
+    </div>
+</div>
+<br />
+<div class="rowtile">
+    <h2>Step3: Choose the features</h2>
+    <form method="post" action="method2">
+        {% csrf_token %}
+        <div class="col-md-4">
+            <p>Select X features to calculate:</p>
+            {% for field in form %}
+            <label>
+                <input type="checkbox" name="field_name_x" value="{{ field.label }}" class="field-x-option">
+                {{ field.label }}
+            </label>
+            <br>
+            {% endfor %}
+            <br />
+        </div>
+        <div class="col-md-4">
+            <p>Select Y feature to predict:</p>
+            {% for field in form %}
+            <label>
+                <input type="checkbox" name="field_name_y" value="{{ field.label }}" class="field-y-option">
+                {{ field.label }}
+            </label>
+            <br>
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </div>
+</form>
+    <div class="row">
+
+        <h2>Selected features from data set</h2>
+        <div>
+            <h3>The dependent features(X): {{xfeatures}}</h3>
+            <br />
+            <h3>The feature to predict(Y): {{yfeatures}}</h3>
+
+        </div>
     </div>
 </div>
 <br/>
-<h2>The dataset from CSV:</h2>
-<div class="row" id="dataset">
-    {{dataitems|safe}}
-</div>
-<br/>
-<br/>
-<div class="row">
-    <form method="post" action="method2">
+<div class="rowtile" id="models">
+    <h2>Step4: Select Algorithms to evaluate and compare:</h2>
+    <form method="post" action="models" name="models_name">
         {% csrf_token %}
+        <input type="checkbox" name="models_selection" value="Linear_Regression"> Linear Regression<br />
+        <input type="checkbox" name="models_selection" value="Logistic_Regression"> Logistic Regression<br />
+        <input type="checkbox" name="models_selection" value="Decision_Trees"> Decision Trees<br />
 
-        <p>Select X features to calculate:</p>
-        {% for field in form %}
-        <label>
-            <input type="checkbox" name="field_name_x" value="{{ field.label }}">
-            {{ field.label }}
-        </label>
-        <br>
-        {% endfor %}
-        <br />
-        <p>Select Y feature to predict:</p>
-        {% for field in form %}
-        <label>
-            <input type="checkbox" name="field_name_y" value="{{ field.label }}">
-            {{ field.label }}
-        </label>
-        <br>
-        {% endfor %}
         <button type="submit">Submit</button>
     </form>
 </div>
-<div class="row">
-    <div>
-        <h1>{{xfeatures}}</h1>
-        <br />
-        <h1>{{yfeatures}}</h1>
-
-    </div>
+<br/>
+<div class="rowtile" id="models">
+    <h2>Step5: Find the results below:</h2>
+    <h2>{{selected_models}}</h2>
+    <h2>{{Results|safe}}</h2>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Handler for checkboxes with class "field-y-option"
+        $(".field-x-option").change(function () {
+            var selectedOptions = [];
+            $(".field-x-option:checked").each(function () {
+                selectedOptions.push($(this).val());
+            });
+
+            // Disable options in field_name_y that are not selected in field_name_x
+            $("input[name='field_name_y']").each(function () {
+                var optionValue = $(this).val();
+                if (selectedOptions.indexOf(optionValue) === -1) {
+                    $(this).prop("disabled", false);
+                } else {
+                    $(this).prop("disabled", true);
+                    $(this).prop("checked", false);
+                }
+            });
+        });
+
+        // Submit form
+        $("#myForm").submit(function (event) {
+            // Prevent form submission for demonstration purposes
+            event.preventDefault();
+            // Add your own logic for form submission
+        });
+    });
+</script>
+
 
     {% endblock %}

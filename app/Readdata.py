@@ -10,13 +10,6 @@ from django.shortcuts import HttpResponse
 from django.utils.html import strip_tags
 from django import forms
 
-file = ''
-dataframe = pd.DataFrame
-dataset_headers = []
-
-
-
-
 
 
 # Read the given CSV file, and view some sample records
@@ -35,7 +28,22 @@ def upload_file(request):
     if request.method == 'POST':
         try:
             file = request.FILES['file']
-            dataframe = pd.read_csv(file)
+
+            csv_file = request.FILES['file']
+
+            dataframe = pd.read_csv(csv_file)
+        
+            # Define the directory to save the CSV file
+            save_directory = '/path/to/save/'
+        
+            # Create the save directory if it doesn't exist
+            os.makedirs(save_directory, exist_ok=True)
+        
+            # Construct the file path to save the CSV file
+            file_path = os.path.join(save_directory, csv_file.name)
+                        
+            file_path = handle_uploaded_file(file,file_path)            
+            request.session['file_pa'] = file_path
             dataset_headers = dataframe.columns.tolist() 
             form = DatasetForm(dataset_headers=dataset_headers)
             # Process the dataframe or perform any required operations
@@ -58,14 +66,23 @@ def post2_view(request):
         try:
             selected_fields_x = request.POST.getlist('field_name_x')
             predictor = request.POST.getlist('field_name_y')
+            request.session['selected_fields_x'] = selected_fields_x
+            request.session['predictor'] = predictor
+            file = request.session['file_pa']
+            dataframe = pd.read_csv(file)
+            dataset_headers = dataframe.columns.tolist() 
+            form = DatasetForm(dataset_headers=dataset_headers)
             # Process the dataframe or perform any required operations
             # ...
             return render(
                 request, 
                 'app/index.html',
                 {
-                    'xfeatures':selected_fields_x,
-                    'yfeatures': predictor
+                    'datatitle':'Uploaded data',
+                    'dataitems': dataframe.to_html(),
+                    'xfeatures': selected_fields_x,
+                    'yfeatures': predictor,
+                    'form': form
                 })
         except Exception as e:
             print(e)
@@ -92,8 +109,7 @@ def fields_selection(request):
     return render(request, 'app/index.html')
 
 
-def handle_uploaded_file(uploaded_file):
-    file_path = 'path/to/save/file.txt'  # Specify the desired file path
+def handle_uploaded_file(uploaded_file,file_path):
     with open(file_path, 'wb') as destination:
         for chunk in uploaded_file.chunks():
             destination.write(chunk)

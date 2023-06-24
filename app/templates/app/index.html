@@ -16,11 +16,18 @@
     </form>
 </div>
 <br />
-<div class="rowtile" id="dataset">
+<div class="rowtile">
     <h2>Step2: Verify the data in below dataset</h2>
 
-    <div class="col-md-12">
+    <div class="col-md-12" id="dataset">
         {{dataitems|safe}}
+    </div>
+    <div>
+        <h3>Corelation heat map:</h3>
+        {{corel_plot|safe}}
+        <img src="{{corel_plot|safe}}" alt="{{corel_plot|safe}}">
+        <br />
+        <img src="data:image/png;base64, {{corel_plot}}" alt="Red dot" />
     </div>
 </div>
 <br />

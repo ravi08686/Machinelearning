@@ -1,6 +1,8 @@
 
 from ast import List
+import base64
 from datetime import datetime
+import io
 from django.shortcuts import render
 from django.http import HttpRequest
 import numpy as np
@@ -9,6 +11,8 @@ import os
 from django.shortcuts import HttpResponse
 from django.utils.html import strip_tags
 from django import forms
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 
@@ -46,6 +50,8 @@ def upload_file(request):
             request.session['file_pa'] = file_path
             dataset_headers = dataframe.columns.tolist() 
             form = DatasetForm(dataset_headers=dataset_headers)
+            
+            corelation_plot = corelation(dataframe)
             # Process the dataframe or perform any required operations
             # ...
             return render(
@@ -54,6 +60,7 @@ def upload_file(request):
                 {
                     'datatitle':'Uploaded data',
                     'dataitems': dataframe.to_html(),
+                    'corel_plot': corelation_plot,  
                     'form': form
                 })
         except Exception as e:
@@ -72,6 +79,9 @@ def post2_view(request):
             dataframe = pd.read_csv(file)
             dataset_headers = dataframe.columns.tolist() 
             form = DatasetForm(dataset_headers=dataset_headers)
+            
+            corelation_plot = corelation(dataframe)
+
             # Process the dataframe or perform any required operations
             # ...
             return render(
@@ -80,6 +90,7 @@ def post2_view(request):
                 {
                     'datatitle':'Uploaded data',
                     'dataitems': dataframe.to_html(),
+                    'corel_plot': corelation_plot,
                     'xfeatures': selected_fields_x,
                     'yfeatures': predictor,
                     'form': form
@@ -88,6 +99,22 @@ def post2_view(request):
             print(e)
         
     return render(request, 'app/index.html')
+
+
+def corelation(new_dataframe):
+    cm=new_dataframe.corr()
+    fig,ax = plt.subplots(figsize=(15,15))
+    ax=sns.heatmap(cm,annot=True)
+        ### Saving plot to disk in png format
+    plt.savefig('Static/square_plot.png')
+
+    ### Rendering Plot in Html
+    figfile = io.BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    figdata_png = base64.b64encode(figfile.getvalue())
+    result = str(figdata_png)[2:-1]
+    return figfile
 
 def fields_selection(request):
     

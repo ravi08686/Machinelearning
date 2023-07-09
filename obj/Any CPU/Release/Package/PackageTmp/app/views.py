@@ -3,12 +3,15 @@ Definition of views.
 """
 
 from datetime import datetime
+from http.client import HTTPResponse
 from django.shortcuts import render
 from django.http import HttpRequest
 
+from app.Readdata import DatasetForm
+
 def home(request):
     """Renders the home page."""
-    assert isinstance(request, HttpRequest)
+    assert isinstance(request, HttpRequest)    
     return render(
         request,
         'app/index.html',
@@ -17,6 +20,7 @@ def home(request):
             'year':datetime.now().year,
         }
     )
+
 
 def contact(request):
     """Renders the contact page."""

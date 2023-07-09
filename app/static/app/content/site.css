@@ -24,6 +24,13 @@ body {
     height: auto;
     max-height: 400px;
 }
+#dataset2 {
+    background-color: aliceblue;
+    width: 1200;
+    overflow-y: auto;
+    height: auto;
+    max-height: 400px;
+}
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,

@@ -9,6 +9,28 @@ body {
     padding-right: 15px;
 }
 
+.rowtile {
+    background: bisque;
+    /* background: padding-box; */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+
+#dataset {
+    background-color: aliceblue;
+    width: 1200;
+    overflow-y: auto;
+    height: auto;
+    max-height: 400px;
+}
+#dataset2 {
+    background-color: aliceblue;
+    width: 1200;
+    overflow-y: auto;
+    height: auto;
+    max-height: 400px;
+}
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,

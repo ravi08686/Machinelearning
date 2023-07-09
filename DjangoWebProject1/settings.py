@@ -23,12 +23,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # The absolute filesystem path to 
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'c0f7f87c-1d2a-465d-8b1b-f40215464240'
+#SECRET_KEY = 'c0f7f87c-1d2a-465d-8b1b-f40215464240'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','192.168.0.100','192.168.0.100:81']
 
 # Application references
 # https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-INSTALLED_APPS

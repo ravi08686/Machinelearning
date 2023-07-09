@@ -15,6 +15,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('contact/', views.contact, name='contact'),
     path('method1', Readdata.upload_file, name='upload_file'),
+    path('features', Readdata.features_sel, name='features_sel'),
     path('method2', Readdata.post2_view, name='post2_view'),
     path('models', process_data.processdata, name='processdata'),
     path('fields_selection/', Readdata.fields_selection, name='fields_selection'),

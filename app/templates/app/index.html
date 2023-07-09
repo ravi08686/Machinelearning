@@ -16,48 +16,83 @@
     </form>
 </div>
 <br />
+{% if dataitems %}
 <div class="rowtile">
     <h2>Step2: Verify the data in below dataset</h2>
 
     <div class="col-md-12" id="dataset">
         {{dataitems|safe}}
     </div>
+</div>
+{% endif %}
+
+<br />
+{% if form %}
+<div class="rowtile">
+    <div class="row">
+        <h2>Step3: Choose the valid features for analysis:</h2>
+        <form method="post" action="features">
+            {% csrf_token %}
+            <div class="col-md-4">
+                {% for field in form %}
+                <label>
+                    <input type="checkbox" name="field_names" value="{{ field.label }}" class="field-x-option">
+                    {{ field.label }}
+                </label>
+                {% endfor %}
+                <button type="submit">Submit</button>
+                <br />
+            </div>
+        </form>
+    </div>
+    {% if dataitems_final %}
+    <div class="col-md-12" id="dataset2">
+        {{dataitems_final|safe}}
+    </div>
     <div>
         <h3>Corelation heat map:</h3>
-        {{corel_plot|safe}}
-        <img src="{{corel_plot|safe}}" alt="{{corel_plot|safe}}">
-        <br />
-        <img src="data:image/png;base64, {{corel_plot}}" alt="Red dot" />
+        {% if corel_plot %}
+        <img width="800px" src="data:image/png;base64,{{corel_plot}}" alt="Red dot" />
+        {% else %}
+        <h3>Corelation not generated as the lenght of the columns is morethan 10.</h3>
+        {% endif %}
     </div>
+    {% endif %}
 </div>
+{% endif %}
+
 <br />
+{% if dataitems_final %}
 <div class="rowtile">
-    <h2>Step3: Choose the features</h2>
-    <form method="post" action="method2">
-        {% csrf_token %}
-        <div class="col-md-4">
-            <p>Select X features to calculate:</p>
-            {% for field in form %}
-            <label>
-                <input type="checkbox" name="field_name_x" value="{{ field.label }}" class="field-x-option">
-                {{ field.label }}
-            </label>
-            <br>
-            {% endfor %}
-            <br />
-        </div>
-        <div class="col-md-4">
-            <p>Select Y feature to predict:</p>
-            {% for field in form %}
-            <label>
-                <input type="checkbox" name="field_name_y" value="{{ field.label }}" class="field-y-option">
-                {{ field.label }}
-            </label>
-            <br>
-            {% endfor %}
-            <button type="submit">Submit</button>
-        </div>
-</form>
+    <div class="row">
+        <h2>Step4: Choose the X & Y features for analysis:</h2>
+        <form method="post" action="method2">
+            {% csrf_token %}
+            <div class="col-md-4">
+                <p>Select X features to calculate:</p>
+                {% for field in form2 %}
+                <label>
+                    <input type="checkbox" name="field_name_x" value="{{ field.label }}" class="field-x-option">
+                    {{ field.label }}
+                </label>
+                <br>
+                {% endfor %}
+                <br />
+            </div>
+            <div class="col-md-4">
+                <p>Select Y feature to predict:</p>
+                {% for field in form2 %}
+                <label>
+                    <input type="checkbox" name="field_name_y" value="{{ field.label }}" class="field-y-option">
+                    {{ field.label }}
+                </label>
+                <br>
+                {% endfor %}
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+    {% if xfeatures %}
     <div class="row">
 
         <h2>Selected features from data set</h2>
@@ -68,25 +103,33 @@
 
         </div>
     </div>
+    {% endif %}
 </div>
-<br/>
+{% endif %}
+<br />
+{% if xfeatures %}
 <div class="rowtile" id="models">
-    <h2>Step4: Select Algorithms to evaluate and compare:</h2>
+    <h2>Step5: Select Algorithms to evaluate and compare:</h2>
     <form method="post" action="models" name="models_name">
         {% csrf_token %}
         <input type="checkbox" name="models_selection" value="Linear_Regression"> Linear Regression<br />
         <input type="checkbox" name="models_selection" value="Logistic_Regression"> Logistic Regression<br />
         <input type="checkbox" name="models_selection" value="Decision_Trees"> Decision Trees<br />
+        <input type="checkbox" name="models_selection" value="SVM"> Support Vector Machine Algorithm<br />
 
         <button type="submit">Submit</button>
     </form>
 </div>
-<br/>
+{% endif %}
+<br />
+{% if selected_models %}
 <div class="rowtile" id="models">
-    <h2>Step5: Find the results below:</h2>
+    <h2>Step6: Find the results below:</h2>
     <h2>{{selected_models}}</h2>
-    <h2>{{Results|safe}}</h2>
+    <br />
+    <h2>{{Results|safe}}</h2>    
 </div>
+{% endif %}
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

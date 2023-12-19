@@ -42,7 +42,7 @@ def processdata(request):
             sc = StandardScaler()
             X_train = sc.fit_transform(X_train)
             X_test = sc.transform(X_test)
-
+            Models_Result = ""
             selected_models = request.POST.getlist('models_selection')
             for model in selected_models:
                 if model == "Linear_Regression":
@@ -119,7 +119,7 @@ def SVM(X_train, X_test, y_train, y_test):
     from sklearn.tree import DecisionTreeClassifier 
     from sklearn.metrics import accuracy_score  
     from sklearn.svm import SVC # "Support vector classifier"  
-    classifier = SVC(kernel='linear', random_state=0)  
+    classifier = SVC()  
     classifier.fit(X_train, y_train) 
     
     #Predicting the test set result  
